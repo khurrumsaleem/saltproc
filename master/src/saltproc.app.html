@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>saltproc.app module &mdash; Saltproc 0.4.0.dev documentation</title>
+  <title>saltproc.app module &mdash; Saltproc 0.4.0 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -28,7 +28,7 @@
             <a href="../index.html" class="icon icon-home"> Saltproc
           </a>
               <div class="version">
-                0.4.0.dev
+                0.4.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -43,6 +43,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../examples.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html">SaltProc API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../releasenotes/index.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../devguide/index.html">Developer’s Guide</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/arfc/saltproc/blob/master/CITATION.md">How to cite</a></li>
 </ul>
 
@@ -73,26 +75,14 @@
   <section id="module-saltproc.app">
 <span id="saltproc-app-module"></span><h1>saltproc.app module<a class="headerlink" href="#module-saltproc.app" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
-<dt class="sig sig-object py" id="saltproc.app.check_restart">
-<span class="sig-prename descclassname"><span class="pre">saltproc.app.</span></span><span class="sig-name descname"><span class="pre">check_restart</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">restart_flag</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/saltproc/app.html#check_restart"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#saltproc.app.check_restart" title="Permalink to this definition">¶</a></dt>
-<dd><p>If the user set <cite>Restart simulation from the step when it stopped?</cite>
-for <cite>False</cite> clean out iteration files and database from previous run.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>restart_flag</strong> (<em>bool</em>) – Is the current simulation restarted?</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
 <dt class="sig sig-object py" id="saltproc.app.parse_arguments">
 <span class="sig-prename descclassname"><span class="pre">saltproc.app.</span></span><span class="sig-name descname"><span class="pre">parse_arguments</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/saltproc/app.html#parse_arguments"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#saltproc.app.parse_arguments" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parses arguments from command line.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p><ul class="simple">
-<li><p><strong>n</strong> (<em>int</em>) – Number of nodes for use in Serpent simulation.</p></li>
-<li><p><strong>d</strong> (<em>int</em>) – Number of cores for use in Serpent simulation.</p></li>
+<li><p><strong>n</strong> (<em>int</em>) – Number of nodes for use in depletion code simulation.</p></li>
+<li><p><strong>d</strong> (<em>int</em>) – Number of cores for use in depletion code simulation.</p></li>
 <li><p><strong>i</strong> (<em>str</em>) – Path and name of main SaltProc input file (json format).</p></li>
 </ul>
 </p>
@@ -180,26 +170,25 @@ extraction process efficiency for each target chemical element.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="saltproc.app.refill">
-<span class="sig-prename descclassname"><span class="pre">saltproc.app.</span></span><span class="sig-name descname"><span class="pre">refill</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extracted_mass</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">waste_dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/saltproc/app.html#refill"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#saltproc.app.refill" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">saltproc.app.</span></span><span class="sig-name descname"><span class="pre">refill</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mats</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extracted_mass</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">waste_dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/saltproc/app.html#refill"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#saltproc.app.refill" title="Permalink to this definition">¶</a></dt>
 <dd><p>Makes up material loss in removal processes by adding fresh fuel.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>mat</strong> (<em>dict of str to Materialflow</em>) – <dl class="simple">
+<li><p><strong>mats</strong> (<em>dict of str to Materialflow</em>) – <dl class="simple">
 <dt><code class="docutils literal notranslate"><span class="pre">key</span></code></dt><dd><p>Name of burnable material.</p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">value</span></code></dt><dd><p><cite>Materialflow</cite> object after performing all removals.</p>
 </dd>
 </dl>
 </p></li>
-<li><p><strong>extracted_mass</strong> (<em>dict of str to float</em>) – <dl class="simple">
-<dt><code class="docutils literal notranslate"><span class="pre">key</span></code></dt><dd><p>Name of burnable material.</p>
-</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">value</span></code></dt><dd><p>Mass removed as waste in reprocessing function for each material.</p>
-</dd>
-</dl>
+<li><p><strong>extracted_mass</strong> (<em>dict of str to float</em>) – <p>Name of burnable material.
+<code class="docutils literal notranslate"><span class="pre">value</span></code></p>
+<blockquote>
+<div><p>Mass removed as waste in reprocessing function for each material.</p>
+</div></blockquote>
 </p></li>
-<li><p><strong>waste</strong> (<em>dict of str to Materialflow</em>) – <dl class="simple">
+<li><p><strong>waste_dict</strong> (<em>dict of str to Materialflow</em>) – <dl class="simple">
 <dt><code class="docutils literal notranslate"><span class="pre">key</span></code></dt><dd><p>Process name.</p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">value</span></code></dt><dd><p><cite>Materialflow</cite> object containing waste streams data.</p>
@@ -226,7 +215,7 @@ extraction process efficiency for each target chemical element.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="saltproc.app.reprocessing">
-<span class="sig-prename descclassname"><span class="pre">saltproc.app.</span></span><span class="sig-name descname"><span class="pre">reprocessing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mat</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/saltproc/app.html#reprocessing"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#saltproc.app.reprocessing" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">saltproc.app.</span></span><span class="sig-name descname"><span class="pre">reprocessing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mats</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/saltproc/app.html#reprocessing"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#saltproc.app.reprocessing" title="Permalink to this definition">¶</a></dt>
 <dd><p>Applies reprocessing scheme to burnable materials.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>

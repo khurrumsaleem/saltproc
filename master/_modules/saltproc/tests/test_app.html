@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>saltproc.tests.test_app &mdash; Saltproc 0.4.0.dev documentation</title>
+  <title>saltproc.tests.test_app &mdash; Saltproc 0.4.0 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -27,7 +27,7 @@
             <a href="../../../index.html" class="icon icon-home"> Saltproc
           </a>
               <div class="version">
-                0.4.0.dev
+                0.4.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -42,6 +42,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../examples.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../src/index.html">SaltProc API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../releasenotes/index.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../devguide/index.html">Developer’s Guide</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/arfc/saltproc/blob/master/CITATION.md">How to cite</a></li>
 </ul>
 
@@ -80,27 +82,32 @@
 <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">path</span><span class="p">)))</span>
 <span class="c1"># global class object</span>
 <span class="n">directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
-<span class="n">input_file</span> <span class="o">=</span> <span class="n">directory</span> <span class="o">+</span> <span class="s1">&#39;/test&#39;</span>
+<span class="n">iter_inputfile</span> <span class="o">=</span> <span class="n">directory</span> <span class="o">+</span> <span class="s1">&#39;/test&#39;</span>
 <span class="n">main_input</span> <span class="o">=</span> <span class="n">directory</span> <span class="o">+</span> <span class="s1">&#39;/test.json&#39;</span>
 <span class="n">dot_input</span> <span class="o">=</span> <span class="n">directory</span> <span class="o">+</span> <span class="s1">&#39;/test.dot&#39;</span>
 
 <span class="n">serpent</span> <span class="o">=</span> <span class="n">DepcodeSerpent</span><span class="p">(</span><span class="n">exec_path</span><span class="o">=</span><span class="s1">&#39;sss2&#39;</span><span class="p">,</span>
-                         <span class="n">template_path</span><span class="o">=</span><span class="n">directory</span> <span class="o">+</span> <span class="s1">&#39;/template.inp&#39;</span><span class="p">,</span>
-                         <span class="n">input_path</span><span class="o">=</span><span class="n">input_file</span><span class="p">,</span>
+                         <span class="n">template_inputfile_path</span><span class="o">=</span><span class="n">directory</span> <span class="o">+</span> <span class="s1">&#39;/template.inp&#39;</span><span class="p">,</span>
+                         <span class="n">iter_inputfile</span><span class="o">=</span><span class="n">iter_inputfile</span><span class="p">,</span>
                          <span class="n">iter_matfile</span><span class="o">=</span><span class="n">directory</span> <span class="o">+</span> <span class="s1">&#39;/material&#39;</span><span class="p">,</span>
-                         <span class="n">geo_file</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+                         <span class="n">geo_files</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="test_read_main_input"><a class="viewcode-back" href="../../../src/saltproc.tests.test_app.html#saltproc.tests.test_app.test_read_main_input">[docs]</a><span class="k">def</span> <span class="nf">test_read_main_input</span><span class="p">():</span>
     <span class="n">app</span><span class="o">.</span><span class="n">read_main_input</span><span class="p">(</span><span class="n">main_input</span><span class="p">)</span>
-    <span class="k">assert</span> <span class="n">app</span><span class="o">.</span><span class="n">neutron_pop</span> <span class="o">==</span> <span class="mi">50</span>
-    <span class="k">assert</span> <span class="n">app</span><span class="o">.</span><span class="n">active_cycles</span> <span class="o">==</span> <span class="mi">20</span>
-    <span class="k">assert</span> <span class="n">app</span><span class="o">.</span><span class="n">active_cycles</span> <span class="o">==</span> <span class="mi">20</span>
-    <span class="k">assert</span> <span class="n">app</span><span class="o">.</span><span class="n">db_file</span> <span class="o">==</span> <span class="n">directory</span> <span class="o">+</span> <span class="s1">&#39;/./db_saltproc.h5&#39;</span>
-    <span class="k">assert</span> <span class="n">app</span><span class="o">.</span><span class="n">geo_file</span> <span class="o">==</span> <span class="p">[</span><span class="s1">&#39;347_base.ini&#39;</span><span class="p">]</span>
-    <span class="k">assert</span> <span class="n">app</span><span class="o">.</span><span class="n">restart_flag</span> <span class="ow">is</span> <span class="kc">False</span>
-    <span class="n">np</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_equal</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">power_hist</span><span class="p">,</span> <span class="p">[</span><span class="mf">1.250E+9</span><span class="p">,</span> <span class="mf">1.250E+9</span><span class="p">])</span>
-    <span class="n">np</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_equal</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">depl_hist</span><span class="p">,</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">])</span></div>
+    <span class="k">assert</span> <span class="n">app</span><span class="o">.</span><span class="n">depcode_inp</span><span class="p">[</span><span class="s1">&#39;codename&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;serpent&quot;</span>
+    <span class="k">assert</span> <span class="n">app</span><span class="o">.</span><span class="n">depcode_inp</span><span class="p">[</span><span class="s1">&#39;npop&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">50</span>
+    <span class="k">assert</span> <span class="n">app</span><span class="o">.</span><span class="n">depcode_inp</span><span class="p">[</span><span class="s1">&#39;active_cycles&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">20</span>
+    <span class="k">assert</span> <span class="n">app</span><span class="o">.</span><span class="n">depcode_inp</span><span class="p">[</span><span class="s1">&#39;inactive_cycles&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">20</span>
+    <span class="k">assert</span> <span class="n">app</span><span class="o">.</span><span class="n">simulation_inp</span><span class="p">[</span><span class="s1">&#39;db_name&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">directory</span> <span class="o">+</span> \
+        <span class="s1">&#39;/./data/db_saltproc.h5&#39;</span>
+    <span class="k">assert</span> <span class="n">app</span><span class="o">.</span><span class="n">depcode_inp</span><span class="p">[</span><span class="s1">&#39;geo_file_paths&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="p">[</span><span class="n">directory</span> <span class="o">+</span> <span class="s1">&#39;/./347_base.ini&#39;</span><span class="p">]</span>
+    <span class="k">assert</span> <span class="n">app</span><span class="o">.</span><span class="n">simulation_inp</span><span class="p">[</span><span class="s1">&#39;restart_flag&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">False</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_equal</span><span class="p">(</span>
+        <span class="n">app</span><span class="o">.</span><span class="n">reactor_inp</span><span class="p">[</span><span class="s1">&#39;power_levels&#39;</span><span class="p">],</span> <span class="p">[</span>
+            <span class="mf">1.250E+9</span><span class="p">,</span> <span class="mf">1.250E+9</span><span class="p">])</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_equal</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">reactor_inp</span><span class="p">[</span><span class="s1">&#39;dep_step_length_cumulative&#39;</span><span class="p">],</span>
+                            <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">])</span></div>
 
 
 <div class="viewcode-block" id="test_read_processes_from_input"><a class="viewcode-back" href="../../../src/saltproc.tests.test_app.html#saltproc.tests.test_app.test_read_processes_from_input">[docs]</a><span class="k">def</span> <span class="nf">test_read_processes_from_input</span><span class="p">():</span>
@@ -135,7 +142,7 @@
 
 
 <div class="viewcode-block" id="test_reprocessing"><a class="viewcode-back" href="../../../src/saltproc.tests.test_app.html#saltproc.tests.test_app.test_reprocessing">[docs]</a><span class="k">def</span> <span class="nf">test_reprocessing</span><span class="p">():</span>
-    <span class="n">mats</span> <span class="o">=</span> <span class="n">serpent</span><span class="o">.</span><span class="n">read_dep_comp</span><span class="p">(</span><span class="n">input_file</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+    <span class="n">mats</span> <span class="o">=</span> <span class="n">serpent</span><span class="o">.</span><span class="n">read_dep_comp</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">waste_st</span><span class="p">,</span> <span class="n">rem_mass</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">reprocessing</span><span class="p">(</span><span class="n">mats</span><span class="p">)</span>
     <span class="k">assert</span> <span class="n">rem_mass</span><span class="p">[</span><span class="s1">&#39;fuel&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mf">1401.0846504569054</span>
     <span class="k">assert</span> <span class="n">rem_mass</span><span class="p">[</span><span class="s1">&#39;ctrlPois&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mf">0.0</span>
@@ -145,7 +152,7 @@
 
 
 <div class="viewcode-block" id="test_refill"><a class="viewcode-back" href="../../../src/saltproc.tests.test_app.html#saltproc.tests.test_app.test_refill">[docs]</a><span class="k">def</span> <span class="nf">test_refill</span><span class="p">():</span>
-    <span class="n">mats</span> <span class="o">=</span> <span class="n">serpent</span><span class="o">.</span><span class="n">read_dep_comp</span><span class="p">(</span><span class="n">input_file</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+    <span class="n">mats</span> <span class="o">=</span> <span class="n">serpent</span><span class="o">.</span><span class="n">read_dep_comp</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">waste_st</span><span class="p">,</span> <span class="n">rem_mass</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">reprocessing</span><span class="p">(</span><span class="n">mats</span><span class="p">)</span>
     <span class="n">m_after_refill</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">refill</span><span class="p">(</span><span class="n">mats</span><span class="p">,</span> <span class="n">rem_mass</span><span class="p">,</span> <span class="n">waste_st</span><span class="p">)</span>
     <span class="k">assert</span> <span class="n">m_after_refill</span><span class="p">[</span><span class="s1">&#39;fuel&#39;</span><span class="p">][</span><span class="s1">&#39;feed_leu&#39;</span><span class="p">][</span><span class="s1">&#39;U235&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mf">43.573521906078334</span>
