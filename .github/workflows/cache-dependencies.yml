@@ -35,11 +35,12 @@ jobs:
         uses: conda-incubator/setup-miniconda@v3
         with:
           miniforge-version: latest
+          channels: conda-forge,defaults
           activate-environment: saltproc-env
-          use-mamba: true
+          mamba-version: "*"
           use-only-tar-bz2: true
       - run: |
-          conda config --env --set pip_interop_enabled True
+          mamba config --env --set pip_interop_enabled True
 
 # check for existing cache
       - name: Set cache date
@@ -82,12 +83,13 @@ jobs:
       - name: Set up conda
         uses: conda-incubator/setup-miniconda@v3
         with:
-          miniforge-version: latest
           activate-environment: saltproc-doc-env
-          use-mamba: true
+          miniforge-version: latest
+          channels: conda-forge,defaults
+          mamba-version: "*"
           use-only-tar-bz2: true
       - run: |
-          conda config --env --set pip_interop_enabled True
+          mamba config --env --set pip_interop_enabled True
 
 # check for existing cache
       - name: Set cache date
