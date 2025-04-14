@@ -4,7 +4,7 @@ channels:
   - defaults
 dependencies:
   - python
-  - openmc
+  - openmc>=0.14.0
   - numpy
   - pytables
   - networkx
