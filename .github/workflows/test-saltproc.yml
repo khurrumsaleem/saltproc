@@ -43,7 +43,6 @@ jobs:
           channels: conda-forge
           activate-environment: saltproc-env
           use-mamba: true
-          use-only-tar-bz2: true
       - run: |
           conda config --env --set pip_interop_enabled True
 
@@ -55,15 +54,12 @@ jobs:
         id: dependencies-cache
         with:
           path: |
-            /usr/share/miniconda3/envs/saltproc-env
             ~/endfb71_hdf5
-            ~/.cache/pip
           key: depcache-${{ hashFiles('environment.yml') }}-${{ env.DATE }}-${{ env.CACHE_NUMBER }}
 
 # Install dependencies
       - name: Update environment
         run: mamba env update -n saltproc-env -f environment.yml
-        if: steps.dependencies-cache.outputs.cache-hit != 'true'
 
       - name: Install OpenMC cross section library
         if: steps.dependencies-cache.outputs.cache-hit != 'true'

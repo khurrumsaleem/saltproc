@@ -37,7 +37,6 @@ jobs:
           miniforge-version: latest
           activate-environment: saltproc-env
           use-mamba: true
-          use-only-tar-bz2: true
       - run: |
           conda config --env --set pip_interop_enabled True
 
@@ -49,9 +48,7 @@ jobs:
         id: dependencies-cache
         with:
           path: |
-            /usr/share/miniconda3/envs/saltproc-env
             ~/endfb71_hdf5
-            ~/.cache/pip
           key: depcache-${{ hashFiles('environment.yml') }}-${{ env.DATE }}-${{ env.CACHE_NUMBER }}
 
 # Install dependencies
@@ -77,37 +74,3 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-
-## DOCUMENTATION CACHE ##
-      - name: Set up conda
-        uses: conda-incubator/setup-miniconda@v3
-        with:
-          miniforge-version: latest
-          activate-environment: saltproc-doc-env
-          use-mamba: true
-          use-only-tar-bz2: true
-      - run: |
-          conda config --env --set pip_interop_enabled True
-
-# check for existing cache
-      - name: Set cache date
-        run: echo "DATE=$(date +'%Y%m%d')" >> $GITHUB_ENV
-
-      - uses: actions/cache@v4
-        id: dependencies-cache
-        with:
-          path: |
-            /usr/share/miniconda3/envs/saltproc-doc-env
-            ~/.cache/pip
-          key: depcache-${{ hashFiles('doc/doc-environment.yml') }}-${{ env.DATE }}-${{ env.CACHE_NUMBER }}
-
-# Install dependencies
-      - name: Update environment
-        run: mamba env update -n saltproc-doc-env -f doc/doc-environment.yml
-        if: steps.dependencies-cache.outputs.cache-hit != 'true'
-
-      - name: Install SaltProc
-        run: pip install .
-
-      - name: Check packages
-        run: conda list
