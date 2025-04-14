@@ -1,4 +1,4 @@
-name: saltproc-env-test
+name: saltproc-env
 channels:
   - conda-forge
   - defaults
