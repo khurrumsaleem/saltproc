@@ -27,18 +27,16 @@ jobs:
       LIBMESH: no
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
 ## TESTING CACHE ##
 # Setup conda 
       - name: Set up conda
-        uses: conda-incubator/setup-miniconda@v2
+        uses: conda-incubator/setup-miniconda@v3
         with:
-          miniforge-variant: Mambaforge # mamba is faster than base conda
           miniforge-version: latest
           activate-environment: saltproc-env
           use-mamba: true
-          use-only-tar-bz2: true
       - run: |
           conda config --env --set pip_interop_enabled True
 
@@ -46,14 +44,11 @@ jobs:
       - name: Set cache date
         run: echo "DATE=$(date +'%Y%m%d')" >> $GITHUB_ENV
 
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         id: dependencies-cache
         with:
           path: |
-            /usr/share/miniconda3/envs/saltproc-env
-            ~/openmc_src
             ~/endfb71_hdf5
-            ~/.cache/pip
           key: depcache-${{ hashFiles('environment.yml') }}-${{ env.DATE }}-${{ env.CACHE_NUMBER }}
 
 # Install dependencies
@@ -65,27 +60,6 @@ jobs:
         if: steps.dependencies-cache.outputs.cache-hit != 'true'
         run: $GITHUB_WORKSPACE/scripts/ci/openmc-xs.bash
       
-      - name: OpenMC dependencies
-        run: |
-          sudo apt -y update
-          sudo apt install -y libhdf5-dev
-
-      - name: Download OpenMC
-        if: steps.dependencies-cache.outputs.cache-hit != 'true'
-        uses: actions/checkout@v3
-        with: 
-          repository: openmc-dev/openmc
-          path: openmc
-          submodules: recursive
-          
-      - name: Build OpenMC from source if no cache if found
-        if: steps.dependencies-cache.outputs.cache-hit != 'true'
-        run: $GITHUB_WORKSPACE/tools/ci/build-openmc.sh
-
-      - name: Restore OpenMC source build from cache
-        if: steps.dependencies-cache.outputs.cache-hit == 'true'
-        run: $GITHUB_WORKSPACE/tools/ci/restore-openmc.sh
-          
       - name: Install SaltProc
         run: pip install .
 
@@ -99,53 +73,4 @@ jobs:
         shell: bash -l {0}
 
     steps:
-      - uses: actions/checkout@v3
-
-## DOCUMENTATION CACHE ##
-      - name: Set up conda
-        uses: conda-incubator/setup-miniconda@v2
-        with:
-          miniforge-variant: Mambaforge # mamba is faster than base conda
-          miniforge-version: latest
-          activate-environment: saltproc-doc-env
-          use-mamba: true
-          use-only-tar-bz2: true
-      - run: |
-          conda config --env --set pip_interop_enabled True
-
-# check for existing cache
-      - name: Set cache date
-        run: echo "DATE=$(date +'%Y%m%d')" >> $GITHUB_ENV
-
-      - uses: actions/cache@v3
-        id: dependencies-cache
-        with:
-          path: |
-            /usr/share/miniconda3/envs/saltproc-doc-env
-            ~/.cache/pip
-          key: depcache-${{ hashFiles('doc/doc-environment.yml') }}-${{ env.DATE }}-${{ env.CACHE_NUMBER }}
-
-# Install dependencies
-      - name: Update environment
-        run: mamba env update -n saltproc-doc-env -f doc/doc-environment.yml
-        if: steps.dependencies-cache.outputs.cache-hit != 'true'
-
-      - name: Download OpenMC
-        if: steps.dependencies-cache.outputs.cache-hit != 'true'
-        uses: actions/checkout@v3
-        with: 
-          repository: openmc-dev/openmc
-          path: openmc
-
-      - name: Build OpenMC API
-        if: steps.dependencies-cache.outputs.cache-hit != 'true'
-        run: |
-          cd openmc
-          pip install .
-          cd ../
-
-      - name: Install SaltProc
-        run: pip install .
-
-      - name: Check packages
-        run: conda list
+      - uses: actions/checkout@v4

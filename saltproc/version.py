@@ -3,10 +3,10 @@ from os.path import join as pjoin
 
 # Format expected by setup.py and doc/source/conf.py: string of form "X.Y.Z"
 _version_major = 0
-_version_minor = 5
+_version_minor = 6
 _version_micro = ''  # use '' for first of series, number for 1 and above
-# _version_extra = 'dev'
-_version_extra = '0'  # Uncomment this for full releases
+_version_extra = 'dev'
+# _version_extra = '0'  # Uncomment this for full releases
 
 # Construct full version string from these.
 _ver = [_version_major, _version_minor]
@@ -72,7 +72,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 NAME = "saltproc"
 MAINTAINER = "Oleksandr Yardas"
-MAINTAINER_EMAIL = "arfc@googlegroups.com"
+MAINTAINER_EMAIL = "olek.yardin@gmail.com"
 DESCRIPTION = description
 LONG_DESCRIPTION = long_description
 URL = "http://github.com/arfc/saltproc"
