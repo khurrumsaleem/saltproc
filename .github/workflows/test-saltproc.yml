@@ -14,7 +14,7 @@ on:
   workflow_dispatch:
 
 env:
-  CACHE_NUMBER: 6 #change to manually reset cache
+  CACHE_NUMBER: 0 #change to manually reset cache
 
 jobs:
   test-saltproc:
@@ -43,7 +43,6 @@ jobs:
           channels: conda-forge
           activate-environment: saltproc-env
           use-mamba: true
-          use-only-tar-bz2: true
       - run: |
           conda config --env --set pip_interop_enabled True
 
@@ -55,43 +54,17 @@ jobs:
         id: dependencies-cache
         with:
           path: |
-            /usr/share/miniconda3/envs/saltproc-env
-            ~/openmc_src
-            ~/mcpl_src
             ~/endfb71_hdf5
-            ~/.cache/pip
           key: depcache-${{ hashFiles('environment.yml') }}-${{ env.DATE }}-${{ env.CACHE_NUMBER }}
 
 # Install dependencies
       - name: Update environment
         run: mamba env update -n saltproc-env -f environment.yml
-        if: steps.dependencies-cache.outputs.cache-hit != 'true'
 
       - name: Install OpenMC cross section library
         if: steps.dependencies-cache.outputs.cache-hit != 'true'
         run: $GITHUB_WORKSPACE/scripts/ci/openmc-xs.bash
       
-      - name: OpenMC dependencies
-        run: |
-          sudo apt -y update
-          sudo apt install -y libhdf5-dev
-
-      - name: Download OpenMC
-        if: steps.dependencies-cache.outputs.cache-hit != 'true'
-        uses: actions/checkout@v4
-        with: 
-          repository: openmc-dev/openmc
-          path: openmc
-          submodules: recursive
-
-      - name: Build OpenMC from source if no cache is found
-        if: steps.dependencies-cache.outputs.cache-hit != 'true'
-        run: $GITHUB_WORKSPACE/tools/ci/build-openmc.sh
-
-      - name: Restore OpenMC source build from cache
-        if: steps.dependencies-cache.outputs.cache-hit == 'true'
-        run: $GITHUB_WORKSPACE/tools/ci/restore-openmc.sh
-          
       - name: Install SaltProc
         run:  pip install .
 

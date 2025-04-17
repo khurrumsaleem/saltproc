@@ -56,8 +56,8 @@ def read_keff(file):
 def assert_db_allclose(test_db, ref_db, tol):
     assert_nuclide_mass_allclose(test_db, ref_db, tol)
     assert_in_out_streams_allclose(test_db, ref_db, tol)
-    ref_data, ref_after_param, ref_before_param = read_fuel(ref_db, 'old')
-    test_data, test_after_param, test_before_param = read_fuel(test_db, 'new')
+    ref_data, ref_after_param, ref_before_param = read_fuel(ref_db)
+    test_data, test_after_param, test_before_param = read_fuel(test_db)
     # Compare materials composition
     for node_name, test_comp in test_data.items():
         for nuc, test_mass_arr in test_comp.items():
@@ -71,27 +71,19 @@ def assert_db_allclose(test_db, ref_db, tol):
     np.testing.assert_allclose(test_before_param, ref_before_param, rtol=tol)
 
 def assert_nuclide_mass_allclose(test_db, ref_db, tol):
-    ref_mass_before, ref_mass_after = read_nuclide_mass(ref_db, 'old')
-    test_mass_before, test_mass_after = read_nuclide_mass(test_db, 'new')
+    ref_mass_before, ref_mass_after = read_nuclide_mass(ref_db )
+    test_mass_before, test_mass_after = read_nuclide_mass(test_db)
     for key, val in ref_mass_before.items():
-        if key[-2] == 'm':
-            key = key[:-2] + '_' + key[-2:]
         np.testing.assert_allclose(val, test_mass_before[key], rtol=tol)
     for key, val in ref_mass_after.items():
-        if key[-2] == 'm':
-            key = key[:-2] + '_' + key[-2:]
         np.testing.assert_allclose(val, test_mass_after[key], rtol=tol)
 
-def read_nuclide_mass(db_file, version):
+def read_nuclide_mass(db_file):
     db = tb.open_file(db_file, mode='r')
     fuel_before = db.root.materials.fuel.before_reproc.comp
     fuel_after = db.root.materials.fuel.after_reproc.comp
-    if version == 'old':
-        before_nucmap = fuel_before.attrs.iso_map
-        after_nucmap = fuel_after.attrs.iso_map
-    else:
-        before_nucmap = _create_nuclide_map(db.root.materials.fuel.before_reproc)
-        after_nucmap = _create_nuclide_map(db.root.materials.fuel.after_reproc)
+    before_nucmap = _create_nuclide_map(db.root.materials.fuel.before_reproc)
+    after_nucmap = _create_nuclide_map(db.root.materials.fuel.after_reproc)
 
     mass_before = {}
     mass_after = {}
@@ -107,11 +99,11 @@ def assert_in_out_streams_allclose(test_db, ref_db, tol):
     ref_sparger, \
         ref_separator, \
         ref_ni_filter, \
-        ref_feed = read_in_out_streams(ref_db, 'old')
+        ref_feed = read_in_out_streams(ref_db)
     test_sparger, \
         test_separator, \
         test_ni_filter, \
-        test_feed = read_in_out_streams(test_db, 'new')
+        test_feed = read_in_out_streams(test_db)
     for key, val in test_sparger.items():
         if len(key) > 4 and key[-3] == '_':
             key = key[:-3] + key[-2:]
@@ -133,27 +125,21 @@ def assert_in_out_streams_allclose(test_db, ref_db, tol):
         if key in ref_feed:
             np.testing.assert_allclose(val, ref_feed[key], rtol=tol)
 
-def read_in_out_streams(db_file, version):
+def read_in_out_streams(db_file):
     db = tb.open_file(db_file, mode='r')
     waste_sparger = db.root.materials.fuel.in_out_streams.waste_sparger
     waste_separator = \
         db.root.materials.fuel.in_out_streams.waste_entrainment_separator
     waste_ni_filter = db.root.materials.fuel.in_out_streams.waste_nickel_filter
     feed_leu = db.root.materials.fuel.in_out_streams.feed_leu
-    if version == 'old':
-        waste_sparger_nucmap = waste_sparger.attrs.iso_map
-        waste_separator_nucmap = waste_separator.attrs.iso_map
-        waste_ni_filter_nucmap = waste_ni_filter.attrs.iso_map
-        feed_nucmap = feed_leu.attrs.iso_map
-    else:
-        waste_sparger_nucmap = _create_nuclide_map(waste_sparger)
-        waste_separator_nucmap = _create_nuclide_map(waste_separator)
-        waste_ni_filter_nucmap = _create_nuclide_map(waste_ni_filter)
-        feed_nucmap = _create_nuclide_map(feed_leu)
-        waste_sparger = waste_sparger.comp
-        waste_separator = waste_separator.comp
-        waste_ni_filter = waste_ni_filter.comp
-        feed_leu = feed_leu.comp
+    waste_sparger_nucmap = _create_nuclide_map(waste_sparger)
+    waste_separator_nucmap = _create_nuclide_map(waste_separator)
+    waste_ni_filter_nucmap = _create_nuclide_map(waste_ni_filter)
+    feed_nucmap = _create_nuclide_map(feed_leu)
+    waste_sparger = waste_sparger.comp
+    waste_separator = waste_separator.comp
+    waste_ni_filter = waste_ni_filter.comp
+    feed_leu = feed_leu.comp
 
     mass_waste_sparger = {}
     mass_waste_separator = {}
@@ -178,15 +164,12 @@ def read_in_out_streams(db_file, version):
         mass_waste_ni_filter, \
         mass_feed_leu
 
-def read_fuel(file, version):
+def read_fuel(file):
     db = tb.open_file(file, mode='r')
     fuel = db.root.materials.fuel
     out_data = {}
     for node in db.walk_nodes(fuel, classname="EArray"):
-        if version == 'old':
-            nucmap = node.attrs.iso_map
-        else:
-            nucmap = _create_nuclide_map(node._v_parent)
+        nucmap = _create_nuclide_map(node._v_parent)
         if node._v_name == 'comp':
             node_name = node._v_parent._v_name
         else:
