@@ -23,15 +23,6 @@ jobs:
       run:
         shell: bash -l {0}
 
-    env:
-      MPI: no
-      OMP: no
-      PHDF5: no
-      DAGMC: no
-      EVENT: no
-      VECTFIT: no
-      LIBMESH: no
-
     steps:
       - uses: actions/checkout@v4
 
